@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="js/jquery.js"></script>
+	<script src="js/seedrandom.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="bootstrap/css/style.css" rel="stylesheet">
+	<style>
+		#randomTable {
+			font-family: monospace;
+			font-size: 2.0em;
+			width:80%;
+			
+		}
+		body{
+			background:#B7B7B7;
+			position:relative;
+		 
+		}
+		h4{
+			position:absolute;
+			top:550px;
+			right:30px;
+			z-index:100;
+		}
+		h4 small{
+			color:black;
+			line-height:2.4;
+		}
+		.bg-radius{
+			border-radius:0px;
+		}
+	</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-default bg-radius" role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+				<a class="navbar-brand" href="#">密碼產生器</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			    <p class="navbar-text">
+			    	<select name="JobName" id="JobName">
+                          <option value="normal">一般加密</option>
+                          <option value="special">英文加密</option>
+                        </select>
+			    </p>
+						
+				 
+				<form class="navbar-form navbar-right" role="search">
+
+					請輸入亂數行數：<input type="text" id="txtRow" /> 請輸入亂數表的編號：
+
+					<input type="text" id="txtSeed" value="1234" /> &nbsp;
+					<input type="button" id="btnGo" value="產生亂數表" />
+				</form>
+
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
+
+    <h4>
+    	<small>請輸入行數與行數編號再按下產生鍵</small>
+    	(學生：陳若懷)</h4>
+	  <div id="randomTable">
+	  </div>
+    
+
+	<script>
+		var sPool = "0123456789";
+
+		var selectmenu = document.getElementById("JobName")
+		selectmenu.onchange = function() {
+			var chosenoption = this.options[this.selectedIndex];
+			if (chosenoption.value == "normal") {
+				//alert(this.options[this.selectedIndex].text); 
+				sPool = "0123456789";
+			}
+			else {
+				//alert(this.options[this.selectedIndex].text);
+				sPool = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789";
+			}
+		}
+
+
+		$("#btnGo").click(function() {
+			var result = "";
+			// 純數字:
+			// var sPool = "0123456789";
+			// 數字+小寫字母: (去除 l, o)
+			// var sPool = "abcdefghijkmnpqrstuvwxyz0123456789";
+			// 數字+大小寫字母: (去除 I, O, l, o)
+			// var sPool = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789";
+			//var rowNum = parseInt(RowVal) ;
+			var RowVal = document.getElementById('txtRow').value;
+			var rowNum = RowVal;
+
+			if (rowNum == "") {
+				alert("值不可為空");
+				return false;
+			}
+
+			Math.seedrandom($("#txtSeed").val()); // 設定亂數種子
+			var iRandom = 0;
+			var ch = "?";
+			for (iRow = 1; iRow <= rowNum; iRow++) {
+				var sLine = (iRow + 100).toString().substr(1, 2) + ": ";
+				for (iCol = 1; iCol <= 10; iCol++) {
+					iRandom = Math.floor(Math.random() * sPool.length);
+					ch = sPool.substr(iRandom, 1);
+					sLine += ch;
+				}
+				result += sLine + "<br>";
+			}
+			$("#randomTable").html(result);
+		});
+	</script>
+
+</body>
+
+</html>
